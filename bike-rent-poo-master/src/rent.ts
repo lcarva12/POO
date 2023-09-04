@@ -7,7 +7,8 @@ export class Rent {
         public user: User,
         public dateFrom: Date,
         public dateTo: Date,
-        public dateReturned?: Date
+        public dateReturned?: Date,
+        public id?: string,
     ) {}
 
     static create(rents: Rent[], bike: Bike, user: User, 
