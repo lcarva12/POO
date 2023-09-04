@@ -2,12 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Rent = void 0;
 class Rent {
-    constructor(bike, user, dateFrom, dateTo, dateReturned) {
+    constructor(bike, user, dateFrom, dateTo, dateReturned, id) {
         this.bike = bike;
         this.user = user;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.dateReturned = dateReturned;
+        this.id = id;
     }
     static create(rents, bike, user, startDate, endDate) {
         const canCreate = Rent.canRent(rents, startDate, endDate);
