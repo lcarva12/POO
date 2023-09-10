@@ -2,6 +2,7 @@ import { Bike } from "./bike";
 import { Rent } from "./rent";
 import { User } from "./user";
 import crypto from 'crypto'
+import bcrypt from 'bcrypt'
 
 export class App {
     users: User[] = []
@@ -69,5 +70,37 @@ export class App {
             return
         }
         throw new Error('Rent not found.')
+    }
+
+    // Método para listar todos os usuários cadastrados
+    listUsers(): User[] {
+        return this.users;
+    }
+    
+    // Método para listar todas as reservas/aluguéis cadastrados
+    listRents(): Rent[] {
+        return this.rents;
+    }
+    
+    // Método para listar todas as bikes cadastradas
+    listBikes(): Bike[] {
+        return this.bikes;
+    }
+
+    authenticateUser(email: string, password: string): boolean {
+        // Encontre o usuário com o email fornecido
+        const user = this.findUser(email);
+
+        if (user) {
+            // Use bcrypt para comparar a senha fornecida com a senha armazenada
+            const isPasswordValid = bcrypt.compareSync(password, user.password);
+
+            if (isPasswordValid) {
+                // A senha é válida, o usuário está autenticado
+                return true;
+            }
+        }
+        // Se o usuário não for encontrado ou a senha estiver incorreta, retorne falso
+        return false;
     }
 }
