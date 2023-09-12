@@ -7,7 +7,7 @@ import bcrypt from 'bcrypt'
 export class App {
     users: User[] = []
     bikes: Bike[] = []
-    rents: Rent[] = []
+    currentRents: Rent[] = []
 
     findUser(email: string): User {
         return this.users.find(user => user.email === email)
@@ -28,9 +28,11 @@ export class App {
     registerBike(bike: Bike): string {
         const newId = crypto.randomUUID()
         bike.id = newId
+        bike.isAvailable = true // Marque a bicicleta como disponível
         this.bikes.push(bike)
         return newId
     }
+    
 
     removeUser(email: string): void {
         const userIndex = this.users.findIndex(user => user.email === email)
@@ -41,7 +43,7 @@ export class App {
         throw new Error('User does not exist.')
     }
     
-    rentBike(bikeId: string, userEmail: string, startDate: Date, endDate: Date): void {
+    rentBike(bikeId: string, userEmail: string, hours: number): void {
         const bike = this.bikes.find(bike => bike.id === bikeId)
         if (!bike) {
             throw new Error('Bike not found.')
@@ -50,28 +52,57 @@ export class App {
         if (!user) {
             throw new Error('User not found.')
         }
-        const bikeRents = this.rents.filter(rent =>
-            rent.bike.id === bikeId && !rent.dateReturned
-        )
-        const newRent = Rent.create(bikeRents, bike, user, startDate, endDate)
-        this.rents.push(newRent)
-    }
-
-    returnBike(bikeId: string, userEmail: string) {
-        const today = new Date()
-        const rent = this.rents.find(rent => 
-            rent.bike.id === bikeId &&
-            rent.user.email === userEmail &&
-            rent.dateReturned === undefined &&
-            rent.dateFrom <= today
-        )
-        if (rent) {
-            rent.dateReturned = today
-            return
+        if (!bike.isAvailable) {
+            throw new Error('Bike is not available for rent.')
         }
-        throw new Error('Rent not found.')
+        
+        // Crie uma data para representar o início do aluguel
+        const startDate = new Date();
+        
+        // Calcule a data de término do aluguel com base nas horas alugadas
+        const endDate = new Date(startDate.getTime() + hours * 60 * 60 * 1000);
+    
+        // Calcule o valor do aluguel com base nas horas
+        const rentAmount = bike.rate * hours
+    
+        // Atualize a disponibilidade da bicicleta
+        bike.isAvailable = false
+    
+        // Registre o aluguel atual com 'amount'
+        this.currentRents.push(new Rent(bike, user, startDate, endDate, rentAmount))
     }
+    
 
+    returnBike(bikeId: string, userEmail: string): number {
+        const bike = this.bikes.find(bike => bike.id === bikeId);
+        if (!bike) {
+            throw new Error('Bike not found.');
+        }
+        const user = this.findUser(userEmail);
+        if (!user) {
+            throw new Error('User not found.');
+        }
+        const currentRentIndex = this.currentRents.findIndex(
+            rent => rent.bike.id === bikeId && rent.user.email === userEmail
+        );
+        if (currentRentIndex !== -1) {
+            const currentRent = this.currentRents[currentRentIndex];
+            // Converta as datas para milissegundos e calcule a diferença
+            const currentTime = new Date().getTime();
+            const rentStartTime = currentRent.dateFrom.getTime();
+            const millisecondsRented = currentTime - rentStartTime;
+            // Converta o resultado de volta para horas
+            const hoursRented = millisecondsRented / (1000 * 60 * 60);
+            // Calcule o valor do aluguel com base nas horas
+            const rentAmount = currentRent.amount;
+            // Atualize a disponibilidade da bicicleta
+            bike.isAvailable = true;
+            // Remova o aluguel atual
+            this.currentRents.splice(currentRentIndex, 1);
+            return rentAmount;
+        }
+        throw new Error('Rent not found.');
+    }
     // Método para listar todos os usuários cadastrados
     listUsers(): User[] {
         return this.users;
@@ -79,7 +110,7 @@ export class App {
     
     // Método para listar todas as reservas/aluguéis cadastrados
     listRents(): Rent[] {
-        return this.rents;
+        return this.currentRents;
     }
     
     // Método para listar todas as bikes cadastradas
