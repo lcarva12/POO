@@ -92,6 +92,15 @@ export class App {
     listRents(): Rent[] {
         return this.rents
     }
+
+    updateBikeLocation(bikeId: string, newLocation: string): void {
+        const bike = this.bikes.find((bike) => bike.id === bikeId);
+        if (!bike) {
+            throw new Error('Bike not found.');
+        }
+
+        bike.location = newLocation;
+    }
 }
 
 function diffHours(dt2: Date, dt1: Date) {

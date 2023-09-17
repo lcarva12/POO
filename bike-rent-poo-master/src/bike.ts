@@ -9,6 +9,7 @@ export class Bike {
         public ratings: number,
         public imageUrls: string[],
         public available: boolean = true,
-        public id?: string
+        public id?: string,
+        public location: string | null = null // Adicione o atributo de localização
     ) {}
 }
