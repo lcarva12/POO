@@ -2,6 +2,7 @@ import { Bike } from "./bike";
 import { Crypt } from "./crypt";
 import { Rent } from "./rent";
 import { User } from "./user";
+import { Location } from "./location";
 import crypto from 'crypto'
 
 export class App {
@@ -93,13 +94,10 @@ export class App {
         return this.rents
     }
 
-    updateBikeLocation(bikeId: string, newLocation: string): void {
-        const bike = this.bikes.find((bike) => bike.id === bikeId);
-        if (!bike) {
-            throw new Error('Bike not found.');
-        }
-
-        bike.location = newLocation;
+    moveBikeTo(bikeId: string, location: Location) {
+        const bike = this.bikes.find(bike => bike.id === bikeId)
+        bike.location.latitude = location.latitude
+        bike.location.longitude = location.longitude
     }
 }
 
