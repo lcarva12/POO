@@ -95,9 +95,16 @@ export class App {
     }
 
     moveBikeTo(bikeId: string, location: Location) {
-        const bike = this.bikes.find(bike => bike.id === bikeId)
-        bike.location.latitude = location.latitude
-        bike.location.longitude = location.longitude
+        const bike = this.findBike(bikeId)
+        if (!bike) {
+            throw new Error('Bike not found.');
+        }
+        bike.location.latitude = location.latitude;
+        bike.location.longitude = location.longitude;
+    }
+
+    findBike(bikeId: string): Bike {
+        return this.bikes.find(bike => bike.id === bikeId)
     }
 }
 

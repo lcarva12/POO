@@ -32,5 +32,16 @@ describe('App', () => {
     })
 
     it('should throw an exception when trying to move an unregistered bike', () => {
-    })
+        const app = new App()
+        const bikeId = 'unregistered-bike-id' // Um ID que não existe no app
+        const newYork = new Location(40.753056, -73.983056)
+    
+        // Use uma função anônima para chamar a função moveBikeTo, pois queremos capturar a exceção
+        const moveUnregisteredBike = () => {
+            app.moveBikeTo(bikeId, newYork)
+        }
+    
+        // Use o método expect().toThrow() para verificar se a exceção é lançada
+        expect(moveUnregisteredBike).toThrow('Bike not found.')
+    })    
 })
