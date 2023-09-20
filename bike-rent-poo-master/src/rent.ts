@@ -10,3 +10,4 @@ export class Rent {
         public start: Date,
     ) {}
 }
+
