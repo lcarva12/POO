@@ -1,5 +1,5 @@
-import { Bike } from "./bike";
-import { User } from "./user";
+import { Bike } from "./bike"
+import { User } from "./user"
 
 export class Rent {
     public end: Date = undefined

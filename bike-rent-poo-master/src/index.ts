@@ -1,11 +1,10 @@
-import { App } from "./app";
-import { Bike } from "./bike";
-import { Rent } from "./rent";
-import { User } from "./user";
+import { App } from "./app"
+import { Bike } from "./bike"
+import { User } from "./user"
 import sinon from 'sinon'
 
 async function main() {
-    const clock = sinon.useFakeTimers();
+    const clock = sinon.useFakeTimers()
     const app = new App()
     const user1 = new User('Jose', 'jose@mail.com', '1234')
     await app.registerUser(user1)
