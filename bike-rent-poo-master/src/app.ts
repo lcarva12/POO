@@ -1,8 +1,8 @@
-import { Bike } from "./bike";
-import { Crypt } from "./crypt";
-import { Rent } from "./rent";
-import { User } from "./user";
-import { Location } from "./location";
+import { Bike } from "./bike"
+import { Crypt } from "./crypt"
+import { Rent } from "./rent"
+import { User } from "./user"
+import { Location } from "./location"
 import crypto from 'crypto'
 
 export class App {
@@ -97,10 +97,10 @@ export class App {
     moveBikeTo(bikeId: string, location: Location) {
         const bike = this.findBike(bikeId)
         if (!bike) {
-            throw new Error('Bike not found.');
+            throw new Error('Bike not found.')
         }
-        bike.location.latitude = location.latitude;
-        bike.location.longitude = location.longitude;
+        bike.location.latitude = location.latitude
+        bike.location.longitude = location.longitude
     }
 
     findBike(bikeId: string): Bike {
@@ -109,7 +109,7 @@ export class App {
 }
 
 function diffHours(dt2: Date, dt1: Date) {
-  var diff = (dt2.getTime() - dt1.getTime()) / 1000;
-  diff /= (60 * 60);
-  return Math.abs(diff);
+  var diff = (dt2.getTime() - dt1.getTime()) / 1000
+  diff /= (60 * 60)
+  return Math.abs(diff)
 }
