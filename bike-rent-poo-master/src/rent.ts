@@ -1,5 +1,5 @@
-import { Bike } from "./bike"
-import { User } from "./user"
+import { Bike } from "./bike";
+import { User } from "./user";
 
 export class Rent {
     public end: Date = undefined
@@ -8,6 +8,7 @@ export class Rent {
         public bike: Bike,
         public user: User,
         public start: Date,
+        public id?: string
     ) {}
 }
 
