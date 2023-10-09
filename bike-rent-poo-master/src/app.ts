@@ -7,7 +7,6 @@ import { BikeNotFoundError } from "./errors/bike-not-found-error";
 import { UnavailableBikeError } from "./errors/unavailable-bike-error";
 import { UserNotFoundError } from "./errors/user-not-found-error";
 import { DuplicateUserError } from "./errors/duplicate-user-error";
-import { OpenRentsError } from "./errors/open-rents-error";
 import { RentRepo } from "./ports/rent-repo";
 import { UserRepo } from "./ports/user-repo";
 import { BikeRepo } from "./ports/bike-repo";
