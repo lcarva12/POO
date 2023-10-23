@@ -11,11 +11,11 @@ import { RentError } from "../src/errors/rent-error"
 import { FakeUserRepo } from "./doubles/fake-user-repo"
 import { FakeBikeRepo } from "./doubles/fake-bike-repo"
 import { FakeRentRepo } from "./doubles/fake-rent-repo"
-import { UserRepo } from "../src/ports/user-repo"
+import { PrismaUserRepo } from "../src/ports/prisma-user-repo"
 import { BikeRepo } from "../src/ports/bike-repo"
 import { RentRepo } from "../src/ports/rent-repo"
 
-let userRepo: UserRepo
+let userRepo: PrismaUserRepo
 let bikeRepo: BikeRepo
 let rentRepo: RentRepo
 
