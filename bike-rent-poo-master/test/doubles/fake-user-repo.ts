@@ -1,20 +1,23 @@
-import { UserRepo } from "../../src/ports/user-repo";
+import { PrismaUserRepo } from "../../src/ports/prisma-user-repo";
 import { User } from "../../src/user";
 import crypto from 'crypto'
 
-export class FakeUserRepo implements UserRepo {
+export class FakeUserRepo implements PrismaUserRepo {
     users: User[] = []
 
     async find(email: string): Promise<User> {
         return this.users.find(user => user.email === email)
     }
 
-    async add(user: User): Promise<string> {
-        const newId = crypto.randomUUID()
-        user.id = newId
-        this.users.push(user)
-        return newId
-    }
+    private idCounter: number = 1; // Inicie o contador em 1 ou em um valor adequado
+  
+    async add(user: User): Promise<User | number> {
+        const newId = this.idCounter++;
+        user.id = newId;
+        this.users.push(user);
+        return newId;
+      }
+      
 
     async remove(email: string): Promise<void> {
         const userIndex = this.users.findIndex(user => user.email === email)
