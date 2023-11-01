@@ -5,10 +5,6 @@ import crypto from 'crypto'
 export class FakeRentRepo implements RentRepo {
     rents: Rent[] = []
 
-    async findOpenRentsFor(userEmail: string): Promise<Rent[]> {
-        return this.rents.filter((rent) => rent.user.email === userEmail && !rent.end);
-    }
-
     async add(rent: Rent): Promise<string> {
         const newId = crypto.randomUUID()
         rent.id = newId
@@ -22,6 +18,12 @@ export class FakeRentRepo implements RentRepo {
             rent.user.email === userEmail &&
             !rent.end
         )
+    }
+
+    async findOpenFor(userEmail: string): Promise<Rent[]> {
+        return this.rents.filter(rent =>
+            rent.user.email === userEmail &&
+            !rent.end)
     }
 
     async update(id: string, rent: Rent): Promise<void> {
