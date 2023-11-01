@@ -11,7 +11,7 @@ import { RentError } from "../src/errors/rent-error"
 import { FakeUserRepo } from "./doubles/fake-user-repo"
 import { FakeBikeRepo } from "./doubles/fake-bike-repo"
 import { FakeRentRepo } from "./doubles/fake-rent-repo"
-import { PrismaUserRepo } from "../src/ports/prisma-user-repo"
+import { PrismaUserRepo } from "../src/conectors/mysql-user-repo"
 import { BikeRepo } from "../src/ports/bike-repo"
 import { RentRepo } from "../src/ports/rent-repo"
 

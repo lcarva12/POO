@@ -8,7 +8,7 @@ import { UnavailableBikeError } from "./errors/unavailable-bike-error";
 import { UserNotFoundError } from "./errors/user-not-found-error";
 import { DuplicateUserError } from "./errors/duplicate-user-error";
 import { RentRepo } from "./ports/rent-repo";
-import { PrismaUserRepo } from "./ports/prisma-user-repo";
+import { PrismaUserRepo } from "./conectors/mysql-user-repo";
 import { BikeRepo } from "./ports/bike-repo";
 import { RentError } from "./errors/rent-error";
 import { OpenRentsError } from "./errors/open-rents-error";

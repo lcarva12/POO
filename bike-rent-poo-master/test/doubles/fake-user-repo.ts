@@ -1,4 +1,4 @@
-import { PrismaUserRepo } from "../../src/ports/prisma-user-repo";
+import { PrismaUserRepo } from "../../src/conectors/mysql-user-repo";
 import { User } from "../../src/user";
 import crypto from 'crypto'
 

@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { Rent } from '../rent'
-import { RentRepo } from './rent-repo'
+import { RentRepo } from '../ports/rent-repo'
 
 const prisma = new PrismaClient()
 
