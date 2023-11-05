@@ -16,3 +16,20 @@ model User {
   email    String @unique
   password String
 }
+
+model Bike {
+  id          String    @id @default(uuid())
+  name        String
+  type        String
+  bodySize    Float
+  maxLoad     Float
+  rate        Float
+  description String
+  ratings     Float
+  imageUrls   String[]
+  available   Boolean  @default(true)
+  
+  // Campos para representar a localização
+  latitude    Float
+  longitude   Float
+}
