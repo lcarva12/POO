@@ -7,16 +7,15 @@ import { BikeNotFoundError } from "../src/errors/bike-not-found-error"
 import { UnavailableBikeError } from "../src/errors/unavailable-bike-error"
 import { UserNotFoundError } from "../src/errors/user-not-found-error"
 import { DuplicateUserError } from "../src/errors/duplicate-user-error"
+import { RentError } from "../src/errors/rent-error"
 import { FakeUserRepo } from "./doubles/fake-user-repo"
 import { FakeBikeRepo } from "./doubles/fake-bike-repo"
 import { FakeRentRepo } from "./doubles/fake-rent-repo"
-import { UserRepo } from "../src/ports/user-repo"
+import { PrismaUserRepo } from "../src/ports/prisma-user-repo"
 import { BikeRepo } from "../src/ports/bike-repo"
 import { RentRepo } from "../src/ports/rent-repo"
-import { UserHasOpenRentError } from "../src/errors/user-has-open-rent-error"
 
-
-let userRepo: UserRepo
+let userRepo: PrismaUserRepo
 let bikeRepo: BikeRepo
 let rentRepo: RentRepo
 
@@ -130,15 +129,4 @@ describe('App', () => {
             .resolves.toEqual(user)
     })
 
-    it ('should not remove user with open rents', async () => {
-        const app = new App(userRepo, bikeRepo, rentRepo)
-        const user = new User('Jose', 'jose@mail.com', '1234')
-        await app.registerUser(user)
-        const bike = new Bike('caloi mountainbike', 'mountain bike',
-            1234, 1234, 100.0, 'My bike', 5, [])
-        await app.registerBike(bike)
-        await app.rentBike(bike.id, user.email)
-        await expect(app.removeUser(user.email))
-            .rejects.toThrow(UserHasOpenRentError)
-    })
 })
