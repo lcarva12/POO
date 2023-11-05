@@ -8,17 +8,15 @@ import { UnavailableBikeError } from "./errors/unavailable-bike-error";
 import { UserNotFoundError } from "./errors/user-not-found-error";
 import { DuplicateUserError } from "./errors/duplicate-user-error";
 import { RentRepo } from "./ports/rent-repo";
-import { PrismaUserRepo } from "./ports/prisma-user-repo";
+import { UserRepo } from "./ports/user-repo";
 import { BikeRepo } from "./ports/bike-repo";
-import { RentError } from "./errors/rent-error";
-import { OpenRentsError } from "./errors/open-rents-error";
-
+import { UserHasOpenRentError } from "./errors/user-has-open-rent-error";
 
 export class App {
     crypt: Crypt = new Crypt()
 
     constructor(
-        readonly userRepo: PrismaUserRepo,
+        readonly userRepo: UserRepo,
         readonly bikeRepo: BikeRepo,
         readonly rentRepo: RentRepo
     ) {}
@@ -29,7 +27,7 @@ export class App {
         return user
     }
 
-    async registerUser(user: User): Promise<User | number> {
+    async registerUser(user: User): Promise<string> {
         if (await this.userRepo.find(user.email)) {
           throw new DuplicateUserError()
         }
@@ -48,15 +46,12 @@ export class App {
     }
 
     async removeUser(email: string): Promise<void> {
-        const user = await this.findUser(email);
-        const openRents = await this.rentRepo.findOpenRentsFor(email);
-      
-        if (openRents.length > 0) {
-          throw new OpenRentsError(); // Lançar uma exceção se houver aluguéis em aberto.
+        await this.findUser(email)
+        if ((await this.rentRepo.findOpenFor(email)).length > 0) {
+            throw new UserHasOpenRentError()
         }
-      
-        await this.userRepo.remove(email);
-      }
+        await this.userRepo.remove(email)
+    }
     
     async rentBike(bikeId: string, userEmail: string): Promise<string> {
         const bike = await this.findBike(bikeId)
@@ -73,7 +68,7 @@ export class App {
     async returnBike(bikeId: string, userEmail: string): Promise<number> {
         const now = new Date()
         const rent = await this.rentRepo.findOpen(bikeId, userEmail)
-        if (!rent) throw new RentError()
+        if (!rent) throw new Error('Rent not found.')
         rent.end = now
         await this.rentRepo.update(rent.id, rent)
         rent.bike.available = true

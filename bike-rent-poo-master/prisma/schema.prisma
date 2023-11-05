@@ -1,54 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model bike {
-  id          Int      @id @default(autoincrement())
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+}
+
+model Bike {
+  id          String    @id @default(uuid())
   name        String
   type        String
   bodySize    Float
   maxLoad     Float
   rate        Float
   description String
-  ratings     Int
-  imageUrls   String
+  ratings     Float
+  imageUrls   String[]
   available   Boolean  @default(true)
-  locationId  Int
-  location    location @relation(fields: [locationId], references: [id], map: "Bike_locationId_fkey")
-  rent        rent[]
-
-  @@index([locationId], map: "Bike_locationId_fkey")
-}
-
-model location {
-  id        Int    @id @default(autoincrement())
-  latitude  Float
-  longitude Float
-  bike      bike[]
-}
-
-model rent {
-  id     Int       @id @default(autoincrement())
-  bikeId Int
-  userId Int
-  start  DateTime
-  end    DateTime?
-  bike   bike      @relation(fields: [bikeId], references: [id], map: "Rent_bikeId_fkey")
-  user   user      @relation(fields: [userId], references: [id], map: "Rent_userId_fkey")
-
-  @@index([bikeId], map: "Rent_bikeId_fkey")
-  @@index([userId], map: "Rent_userId_fkey")
-}
-
-model user {
-  id       Int    @id @default(autoincrement())
-  name     String
-  email    String @unique(map: "User_email_key")
-  password String
-  rent     rent[]
+  
+  // Campos para representar a localização
+  latitude    Float
+  longitude   Float
 }
